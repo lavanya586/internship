@@ -1,0 +1,158 @@
+/* General Setup and Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    /* Background with a purple gradient as seen in your image */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px; /* Layout padding */
+}
+
+/* Modal and Container Styling */
+.container, .modal {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Form Layout and Grid */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+/* Input Fields and Labels */
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+}
+
+/* Buttons */
+button {
+    background-color: #667eea;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #5a67d8;
+    transform: translateY(-2px);
+}
+
+.edit-btn {
+    background-color: #f59e0b;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    margin-right: 5px;
+}
+
+.delete-btn {
+    background-color: #ef4444;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+}
+
+/* UI Elements and Notifications */
+.char-count {
+    font-size: 0.7rem;
+    color: #999;
+    margin-top: 4px;
+}
+
+.note {
+    font-size: 0.75rem;
+    color: #666;
+    background: #fffbeb;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: left;
+}
+
+#successBanner {
+    transition: all 0.3s ease;
+    font-weight: 500;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Links and Typography */
+p {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a:hover {
+    text-decoration: underline;
+}
