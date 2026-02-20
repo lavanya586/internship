@@ -2,106 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Portal</title>
+    <title>Dashboard - Project Portal</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div style="text-align: right; padding: 10px;">
-        <button onclick="logout()" style="background: #374151; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
-            Logout 🚪
-        </button>
+    <div class="top-nav">
+        <h1 class="logo">Project Portal</h1>
+        <button onclick="logout()" class="btn-logout">Logout</button>
     </div>
 
-    <div class="container" style="display: flex; gap: 20px; padding: 20px;">
-        
-        <div class="modal" style="flex: 1;">
+    <div class="stats-container">
+        <div class="stat-card">
+            <h4>Total Projects</h4>
+            <p id="totalCount">0</p>
+        </div>
+        <div class="stat-card">
+            <h4>Completed</h4>
+            <p id="completedCount">0</p>
+        </div>
+        <div class="stat-card">
+            <h4>In Progress</h4>
+            <p id="progressCount">0</p>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="dashboard-card">
             <h2>Create New Project</h2>
             <form id="projectForm">
-                <div class="grid">
-                    <div>
-                        <label>Project Name <span style="color:red">*</span></label>
-                        <input type="text" id="projectName" placeholder="e.g., The Hive" required maxlength="50">
-                        <div class="char-count">0/50 characters</div>
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>Project Name <span class="required">*</span></label>
+                        <input type="text" id="projectName" placeholder="e.g., The Hive" required>
+                        <small>0/50 characters</small>
                     </div>
-                    <div>
-                        <label>Division <span style="color:red">*</span></label>
+                    <div class="input-field">
+                        <label>Division <span class="required">*</span></label>
                         <select id="division" required>
                             <option value="">Select division</option>
                             <option value="Arizona">Arizona</option>
+                            <option value="California">California</option>
+                            <option value="Florida">Florida</option>
+                            <option value="Nevada">Nevada</option>
+                            <option value="New York">New York</option>
+                            <option value="Texas">Texas</option>
                         </select>
                     </div>
-                    <div>
-                        <label>Project Type <span style="color:red">*</span></label>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>Project Type <span class="required">*</span></label>
                         <select id="projectType" required>
                             <option value="">Select type</option>
-                            <option value="Internal">Internal</option>
+                            <option value="Data Modeling">Data Modeling</option>
+                            <option value="Machine Learning">Machine Learning</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="API Integration">API Integration</option>
+                            <option value="Data Analytics">Data Analytics</option>
                         </select>
                     </div>
-                    <div>
-                        <label>Status <span style="color:red">*</span></label>
+                    <div class="input-field">
+                        <label>Status <span class="required">*</span></label>
                         <select id="status" required>
                             <option value="">Select status</option>
                             <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Pending">Pending</option>
+                            <option value="On Hold">On Hold</option>
                         </select>
                     </div>
-                    <div class="full-width">
-                        <label>Description</label>
-                        <textarea id="description" placeholder="Project description (optional)"></textarea>
-                    </div>
-                    <div class="full-width note">
-                        <b>Note:</b> Folder structure will be created in the background (3-5 mins).
-                    </div>
                 </div>
-                <div class="footer">
-                    <button type="button" class="btn-cancel">✕ Cancel</button>
-                    <button type="submit" class="btn-create">+ Create Project</button>
+
+                <div class="input-field full-width">
+                    <label>Description</label>
+                    <textarea id="description" placeholder="Project description (optional)"></textarea>
+                </div>
+
+                <div class="alert-info">
+                    <strong>Note:</strong> Folder structure will be created in the background (3-5 mins).
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-secondary">✕ Cancel</button>
+                    <button type="submit" class="btn-primary">+ Create Project</button>
                 </div>
             </form>
         </div>
 
-        <div class="modal" style="flex: 1;">
-            <h3>Existing Projects</h3>
-            <div id="projectList">
-                <table id="projectTable" style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="text-align: left; border-bottom: 1px solid #ddd;">
-                            <th>Name</th>
-                            <th>Division</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="projectTableBody">
-                        </tbody>
-                </table>
+        <div class="dashboard-card table-box">
+            <h2>Existing Projects</h2>
+            <div class="search-section">
+                <input type="text" id="projectSearch" onkeyup="filterProjects()" placeholder="🔍 Search by Project Name...">
             </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>NAME</th>
+                        <th>DIVISION</th>
+                        <th>STATUS</th>
+                        <th>ACTIONS</th> 
+                    </tr>
+                </thead>
+                <tbody id="projectTableBody"></tbody>
+            </table>
         </div>
-    </div>
-
-    <div id="successBanner" style="display: none; background-color: #d1fae5; color: #065f46; padding: 10px; border-radius: 6px; position: fixed; top: 10px; right: 10px; border: 1px solid #10b981;">
-        ✅ Project created successfully!
-    </div>
-
-    <div class="modal" style="margin-top: 30px; margin-left: 20px; margin-right: 20px;">
-        <h3>User Management</h3>
-        <form id="userForm" style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <input type="text" id="userName" placeholder="User Name" required style="flex: 1; padding: 8px;">
-            <input type="email" id="userEmail" placeholder="Email Address" required style="flex: 1; padding: 8px;">
-            <button type="submit" style="background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">+ Add User</button>
-        </form>
-
-        <table id="userTable" style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr style="text-align: left; border-bottom: 2px solid #ddd;">
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody id="userTableBody">
-                </tbody>
-        </table>
     </div>
 
     <script src="script.js"></script>
