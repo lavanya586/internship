@@ -1,9 +1,23 @@
 [
     {
-        "name": "real time",
-        "division": "Arizona",
-        "type": "Data Modeling",
+        "name": "tourist planner",
+        "division": "Florida",
+        "type": "Web Development",
         "status": "Completed",
-        "description": "demo"
+        "description": "college project"
+    },
+    {
+        "name": "web develop",
+        "division": "California",
+        "type": "Web Development",
+        "status": "completed",
+        "description": "college project "
+    },
+    {
+        "name": "real time parking",
+        "division": "Arizona",
+        "type": "Machine Learning",
+        "status": "In Progress",
+        "description": "demo project"
     }
 ]

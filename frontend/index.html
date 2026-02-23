@@ -2,17 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard - Project Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Project Management Portal</title>
+    
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        
+        .btn-logout {
+            background-color: #fef2f2;
+            color: #ef4444;
+            border: 1px solid #fee2e2;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-logout:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+    </style>
+
+    <script>
+        // Security: Redirect to login if no token is found
+        if (!localStorage.getItem('token')) {
+            window.location.href = "login.html";
+        }
+    </script>
 </head>
 <body>
-    <div class="top-nav">
+
+    <header class="top-nav">
         <h1 class="logo">Project Portal</h1>
         <button onclick="logout()" class="btn-logout">Logout</button>
-    </div>
+    </header>
 
-    <div class="stats-container">
+    <section class="stats-container">
         <div class="stat-card">
             <h4>Total Projects</h4>
             <p id="totalCount">0</p>
@@ -25,17 +55,17 @@
             <h4>In Progress</h4>
             <p id="progressCount">0</p>
         </div>
-    </div>
+    </section>
 
-    <div class="main-container">
-        <div class="dashboard-card">
+    <main class="main-container">
+        
+        <section class="dashboard-card">
             <h2>Create New Project</h2>
             <form id="projectForm">
                 <div class="input-row">
                     <div class="input-field">
                         <label>Project Name <span class="required">*</span></label>
-                        <input type="text" id="projectName" placeholder="e.g., The Hive" required>
-                        <small>0/50 characters</small>
+                        <input type="text" id="projectName" placeholder="e.g., Enterprise Data Pipeline" required>
                     </div>
                     <div class="input-field">
                         <label>Division <span class="required">*</span></label>
@@ -77,38 +107,39 @@
 
                 <div class="input-field full-width">
                     <label>Description</label>
-                    <textarea id="description" placeholder="Project description (optional)"></textarea>
+                    <textarea id="description" placeholder="Enter project scope or brief description..."></textarea>
                 </div>
 
-                <div class="alert-info">
-                    <strong>Note:</strong> Folder structure will be created in the background (3-5 mins).
+                <div class="system-note" style="margin: 15px 0; font-size: 13px; color: #666;">
+                    <strong>System Note:</strong> Project environment setup and folder structure generation may take 3-5 minutes.
                 </div>
 
                 <div class="button-group">
-                    <button type="button" class="btn-secondary">✕ Cancel</button>
-                    <button type="submit" class="btn-primary">+ Create Project</button>
+                    <button type="reset" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Confirm & Create</button>
                 </div>
             </form>
-        </div>
+        </section>
 
-        <div class="dashboard-card table-box">
-            <h2>Existing Projects</h2>
-            <div class="search-section">
-                <input type="text" id="projectSearch" onkeyup="filterProjects()" placeholder="🔍 Search by Project Name...">
+        <section class="dashboard-card table-box">
+            <h2>Project Portfolio</h2>
+            <div class="search-bar">
+                <input type="text" id="projectSearch" placeholder="🔍 Filter by Project Name..." aria-label="Search Projects" onkeyup="filterProjects()">
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>NAME</th>
-                        <th>DIVISION</th>
-                        <th>STATUS</th>
-                        <th>ACTIONS</th> 
+                        <th>Project Name</th>
+                        <th>Division</th>
+                        <th>Status</th>
+                        <th>Actions</th> 
                     </tr>
                 </thead>
                 <tbody id="projectTableBody"></tbody>
             </table>
-        </div>
-    </div>
+        </section>
+
+    </main>
 
     <script src="script.js"></script>
 </body>

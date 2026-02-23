@@ -17,7 +17,7 @@ function logout() {
     window.location.href = "login.html";
 }
 
-// 3. Load Projects with Edit & Delete Buttons
+
 async function loadProjects() {
     try {
         const response = await fetch(`${API_URL}/projects`);
@@ -35,7 +35,7 @@ async function loadProjects() {
                 badgeStyle = "background:#fff3e0; color:#f57c00;"; 
             }
 
-            // Corrected row template with project.name
+       
             const row = `
                 <tr>
                     <td style="padding: 12px;">${project.name || 'N/A'}</td>
@@ -56,7 +56,7 @@ async function loadProjects() {
             tableBody.innerHTML += row;
         });
 
-        // Stats Update
+     
         document.getElementById('totalCount').innerText = projects.length;
         document.getElementById('completedCount').innerText = projects.filter(p => p.status === 'Completed').length;
         document.getElementById('progressCount').innerText = projects.filter(p => p.status === 'In Progress').length;
@@ -66,7 +66,7 @@ async function loadProjects() {
     }
 }
 
-// 4. Update Status Logic (PUT)
+
 async function editProjectStatus(projectName) {
     const newStatus = prompt("Enter new status (Completed / In Progress / Pending):");
     if (!newStatus) return;
@@ -89,7 +89,7 @@ async function editProjectStatus(projectName) {
     }
 }
 
-// 5. Delete Logic (DELETE)
+
 async function deleteProject(projectName) {
     if (!confirm(`Are you sure you want to delete "${projectName}"?`)) return;
 

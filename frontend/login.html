@@ -5,7 +5,7 @@
     <title>Login - Project Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Modern UI Styling */
+       
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f4f7f9; display: flex; justify-content: center; align-items: center; height: 100vh; }
         
@@ -48,7 +48,7 @@
             margin-top: 10px;
         }
 
-        /* Error message box logic */
+       
         .error-box { 
             background: #fef2f2; 
             color: #ef4444; 
@@ -93,7 +93,7 @@
             const password = document.getElementById('password').value;
 
             try {
-                // Backend login connection
+              
                 const response = await fetch("http://127.0.0.1:8000/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -103,21 +103,18 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Success logic: Store token and redirect
+                    
                     localStorage.setItem("token", data.access_token);
                     window.location.href = "index.html"; 
                 } else {
-                    // Error logic: Invalid credentials
+                
                     errorBox.innerText = data.detail || "Invalid Email or Password!";
                     errorBox.style.display = 'block';
                 }
-            } catch (err) {
-                // Connection failed error
-                errorBox.innerText = "🚨 Server connection failed! Please start your backend.";
-                errorBox.style.display = 'block';
+            } catch (error) {
+                console.error("Error during login:", error);
             }
         });
     </script>
-    <script src="login.js"></script>
 </body>
 </html>

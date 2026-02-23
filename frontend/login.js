@@ -7,6 +7,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
 
     try {
+     
         const response = await fetch(`${API_URL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -15,17 +16,18 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
         if (response.ok) {
             const data = await response.json();
-            // Backend-la irundhu varra real JWT token-a save panrom
+            
             localStorage.setItem('token', data.access_token);
             
-            alert("Login Success! 🔥");
-            window.location.href = "index.html"; // Dashboard-ku pogudhu
+            alert("Login Successful! 🔥");
+            
+            window.location.href = "index.html"; 
         } else {
             const error = await response.json();
             alert(error.detail || "Invalid Email or Password!");
         }
     } catch (error) {
         console.error("Login error:", error);
-        alert("Server connection failed!");
+        alert("Server connection failed! Please check if the backend is running.");
     }
 });

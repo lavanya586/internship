@@ -7,63 +7,19 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f4f7f9; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        
-        .register-card { 
-            background: white; 
-            padding: 40px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-            width: 100%; 
-            max-width: 400px; 
-            text-align: center;
-        }
-
+        .register-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
         h2 { margin-bottom: 30px; color: #1a1a1a; font-weight: 600; }
-
         .input-group { text-align: left; margin-bottom: 20px; }
         label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #444; }
-        
-        input { 
-            width: 100%; 
-            padding: 12px; 
-            border: 1px solid #e1e4e8; 
-            border-radius: 8px; 
-            font-size: 14px; 
-            transition: 0.3s;
-        }
-
+        input { width: 100%; padding: 12px; border: 1px solid #e1e4e8; border-radius: 8px; font-size: 14px; transition: 0.3s; }
         input:focus { border-color: #2563eb; outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-
-        .btn-register { 
-            width: 100%; 
-            background: #2563eb; 
-            color: white; 
-            border: none; 
-            padding: 14px; 
-            border-radius: 8px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
-        .error-box { 
-            background: #fef2f2; 
-            color: #ef4444; 
-            padding: 12px; 
-            border-radius: 6px; 
-            font-size: 13px; 
-            margin-top: 20px; 
-            display: none; 
-            border: 1px solid #fee2e2;
-        }
-
+        .btn-register { width: 100%; background: #2563eb; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .error-box { background: #fef2f2; color: #ef4444; padding: 12px; border-radius: 6px; font-size: 13px; margin-top: 20px; display: none; border: 1px solid #fee2e2; }
         .login-link { margin-top: 20px; font-size: 14px; color: #666; }
         .login-link a { color: #2563eb; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
-
     <div class="register-card">
         <h2>Create Account</h2>
         <form id="registerForm">
@@ -95,7 +51,6 @@
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
 
-            // Password matching check logic
             if (password !== confirmPassword) {
                 errorBox.innerText = "🚨 Passwords do not match!";
                 errorBox.style.display = 'block';
@@ -115,13 +70,11 @@
                     alert("Registration Successful! Please login.");
                     window.location.href = "login.html"; 
                 } else {
-                    // Handling "User already exists" error
                     errorBox.innerText = data.detail || "Registration failed!";
                     errorBox.style.display = 'block';
                 }
             } catch (err) {
-                // Handling server connection issues
-                errorBox.innerText = "🚨 Server connection failed! Please check your FastAPI backend.";
+                errorBox.innerText = "🚨 Connection failed! Is your FastAPI (uvicorn) running?";
                 errorBox.style.display = 'block';
             }
         });
