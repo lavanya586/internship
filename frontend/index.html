@@ -2,145 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Project Management Portal</title>
-    
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>24-Hour Sales Report</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     
     <style>
-        
-        .btn-logout {
-            background-color: #fef2f2;
-            color: #ef4444;
-            border: 1px solid #fee2e2;
-            padding: 8px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-logout:hover {
-            background-color: #ef4444;
-            color: white;
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+        .report-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        th { background: #007bff !important; color: white !important; text-align: center; }
+        td { text-align: center; }
+        .final-total { font-weight: bold; color: #28a745; }
+        .daily-summary { 
+            background: #e9ecef; padding: 20px; border-radius: 8px; 
+            margin-top: 20px; border-left: 8px solid #28a745;
         }
     </style>
-
-    <script>
-        // Security: Redirect to login if no token is found
-        if (!localStorage.getItem('token')) {
-            window.location.href = "login.html";
-        }
-    </script>
 </head>
 <body>
 
-    <header class="top-nav">
-        <h1 class="logo">Project Portal</h1>
-        <button onclick="logout()" class="btn-logout">Logout</button>
-    </header>
-
-    <section class="stats-container">
-        <div class="stat-card">
-            <h4>Total Projects</h4>
-            <p id="totalCount">0</p>
-        </div>
-        <div class="stat-card">
-            <h4>Completed</h4>
-            <p id="completedCount">0</p>
-        </div>
-        <div class="stat-card">
-            <h4>In Progress</h4>
-            <p id="progressCount">0</p>
-        </div>
-    </section>
-
-    <main class="main-container">
+    <div class="report-container">
+        <h1>24-Hour Product Sales Report</h1>
         
-        <section class="dashboard-card">
-            <h2>Create New Project</h2>
-            <form id="projectForm">
-                <div class="input-row">
-                    <div class="input-field">
-                        <label>Project Name <span class="required">*</span></label>
-                        <input type="text" id="projectName" placeholder="e.g., Enterprise Data Pipeline" required>
-                    </div>
-                    <div class="input-field">
-                        <label>Division <span class="required">*</span></label>
-                        <select id="division" required>
-                            <option value="">Select division</option>
-                            <option value="Arizona">Arizona</option>
-                            <option value="California">California</option>
-                            <option value="Florida">Florida</option>
-                            <option value="Nevada">Nevada</option>
-                            <option value="New York">New York</option>
-                            <option value="Texas">Texas</option>
-                        </select>
-                    </div>
-                </div>
+        <table id="salesTable" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Hour</th>
+                    <th>Product Name</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Tax Amt</th>
+                    <th>Tax %</th>
+                    <th>Final Total</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                </tbody>
+        </table>
 
-                <div class="input-row">
-                    <div class="input-field">
-                        <label>Project Type <span class="required">*</span></label>
-                        <select id="projectType" required>
-                            <option value="">Select type</option>
-                            <option value="Data Modeling">Data Modeling</option>
-                            <option value="Machine Learning">Machine Learning</option>
-                            <option value="Web Development">Web Development</option>
-                            <option value="API Integration">API Integration</option>
-                            <option value="Data Analytics">Data Analytics</option>
-                        </select>
-                    </div>
-                    <div class="input-field">
-                        <label>Status <span class="required">*</span></label>
-                        <select id="status" required>
-                            <option value="">Select status</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                            <option value="Pending">Pending</option>
-                            <option value="On Hold">On Hold</option>
-                        </select>
-                    </div>
-                </div>
+        <div id="summary"></div>
+    </div>
 
-                <div class="input-field full-width">
-                    <label>Description</label>
-                    <textarea id="description" placeholder="Enter project scope or brief description..."></textarea>
-                </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-                <div class="system-note" style="margin: 15px 0; font-size: 13px; color: #666;">
-                    <strong>System Note:</strong> Project environment setup and folder structure generation may take 3-5 minutes.
-                </div>
+    <script>
+        async function loadReport() {
+            try {
+                const response = await fetch('http://localhost:3000/api/report');
+                const data = await response.json();
+                const tableBody = document.getElementById('tableBody');
+                
+                let totalDayQty = 0;
+                let totalDayTax = 0;
+                let totalDayFinal = 0;
+                let tableRowsHtml = ""; 
 
-                <div class="button-group">
-                    <button type="reset" class="btn-secondary">Cancel</button>
-                    <button type="submit" class="btn-primary">Confirm & Create</button>
-                </div>
-            </form>
-        </section>
+                for (let date in data) {
+                    for (let hour in data[date]) {
+                        data[date][hour].forEach(item => {
+                            totalDayQty += parseFloat(item.qty || 0);
+                            totalDayTax += parseFloat(item.tax_amount || 0);
+                            totalDayFinal += parseFloat(item.final_total || 0);
 
-        <section class="dashboard-card table-box">
-            <h2>Project Portfolio</h2>
-            <div class="search-bar">
-                <input type="text" id="projectSearch" placeholder="🔍 Filter by Project Name..." aria-label="Search Projects" onkeyup="filterProjects()">
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Project Name</th>
-                        <th>Division</th>
-                        <th>Status</th>
-                        <th>Actions</th> 
-                    </tr>
-                </thead>
-                <tbody id="projectTableBody"></tbody>
-            </table>
-        </section>
+                            tableRowsHtml += `<tr>
+                                <td>${date}</td>
+                                <td>${hour}:00</td>
+                                <td>${item.product}</td>
+                                <td>${item.qty}</td>
+                                <td>₹${parseFloat(item.price).toFixed(2)}</td>
+                                <td>₹${parseFloat(item.tax_amount).toFixed(2)}</td>
+                                <td>${parseFloat(item.tax_percent).toFixed(2)}%</td>
+                                <td class="final-total">₹${parseFloat(item.final_total).toFixed(2)}</td>
+                            </tr>`;
+                        });
+                    }
+                }
+                tableBody.innerHTML = tableRowsHtml;
 
-    </main>
+                document.getElementById('summary').innerHTML = `
+                    <div class="daily-summary">
+                        <h3>Daily Summary</h3>
+                        <p><b>Total Quantity Sold:</b> ${totalDayQty}</p>
+                        <p><b>Total Tax Collected:</b> ₹${totalDayTax.toFixed(2)}</p>
+                        <p style="font-size: 22px; color: #28a745;"><b>Net Total Revenue: ₹${totalDayFinal.toFixed(2)}</b></p>
+                    </div>`;
+                $('#salesTable').DataTable({
+                    "pageLength": 10,
+                    "order": [[0, "desc"], [1, "asc"]],
+                    "destroy": true, 
+                    "language": {
+                        "search": "Search Product:"
+                    }
+                });
 
-    <script src="script.js"></script>
+            } catch (err) {
+                console.error(err);
+                alert('Please check the backend! Is node script.js running in the terminal?');
+            }
+        }
+
+    
+        loadReport();
+    </script>
 </body>
 </html>
